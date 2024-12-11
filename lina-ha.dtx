@@ -1,0 +1,203 @@
+% \iffalse meta-comment
+%
+% lina-ha.dtx
+%
+% Copyright (C) 2024 Alan "rakete" B. E. Davis
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   https://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2008 or later.
+%
+% This work consists of the files lina-ha.dtx and lina-ha.ins
+% and the derived file lina-ha.cls.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{lina-ha.dtx}
+%</driver>
+%
+%<class>\NeedsTeXFormat{LaTeX2e}
+%<class>\ProvidesClass{lina-ha}[2024/12/11 Lineare Algebra-Hausaufgabe]
+%
+%<*driver>
+\documentclass{ltxdoc}
+
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\usepackage{amssymb}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+
+\begin{document}
+    \DocInput{lina-ha.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \changes{v1.0}{2024/12/11}{Initial version}
+%
+% \GetFileInfo{lina-ha.dtx}
+%
+% \DoNotIndex{\the,\newtoks,\begin}
+%
+% \title{Die \textsf{lina-ha}-Dokumentenklasse}
+% \author{Alan \textquote{rakete} B.~E.~Davis \\\texttt{rakete@rakete.xyz}}
+%
+% \maketitle
+%
+% \begin{abstract}
+%     Dies ist eine Dokumentenklasse f"ur die Abgabe der Hausaufgaben in
+%     Lineare~Algebra~I* an der Humboldt-Universit"at zu Berlin.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \section{Gebrauch}
+% \subsection{Festlegen der Abgabenteilnehmer}
+% \DescribeMacro{\autora}
+% \DescribeMacro{\autorb}
+% \DescribeMacro{\autorc}
+% \DescribeMacro{\autord}
+% Die Befehle
+% |\autor|\textlangle$a$/$b$/$c$/$d$\textrangle\marg{Name}\marg{Nr.} werden
+% bereitgestellt, um Namen und Matrikelnummern der Abgabenteilnehmer
+% $a, b, c, d$ zu setzen.
+%
+% \subsection{Formatieren der Aufgaben}
+% \DescribeMacro{\Aufgabe}
+% Der Befehl |\Aufgabe|\marg{Nr.}\marg{Anzahl Punkte} formatiert die
+% "Uberschrift f"ur eine Aufgabe.
+%
+% \DescribeEnv{Teilaufgabe}
+% Die |Teilaufgabe|-Umgebung formatiert Teilaufgaben und nummeriert sie
+% fortlaufend.
+%
+% \subsection{Mathematische Ausdr"ucke}
+% Die Pakete |amsmath|, |amsthm|, |amssymb| und |mathtools|
+% werden vorgeladen.
+%
+% Wir definieren ein paar h"aufig gebrauchte Ausdr"ucke.
+%
+% \DescribeMacro{\N}
+% \DescribeMacro{\Z}
+% \DescribeMacro{\Q}
+% \DescribeMacro{\R}
+% \DescribeMacro{\C}
+% Die Befehle |\N|, |\Z|, |\Q|, |\R| und |\C| stellen
+% die Zahlenr"aume $\mathbb N,$ $\mathbb Z,$ $\mathbb Q,$ $\mathbb R$ und
+% $\mathbb C$ dar.
+% \DescribeMacro{\abs}
+% Der Befehl |\abs|\marg{x} stellt den Betrag $\left\vert x\right\vert$ dar.
+%
+% \MaybeStop{\PrintIndex}
+% \section{Implementierung}
+% \subsection{Klasse}
+% Wir nutzen als Ausgangspunkt die |article|-Dokumentenklasse mit der
+% |12pt|-Einstellung.
+%    \begin{macrocode}
+\LoadClass[12pt]{article}
+%    \end{macrocode}
+%
+% \subsection{Externe Pakete}
+% Das Paket |babel| mit der Einstellung |ngerman| dient der
+% Lokalisierung.
+%    \begin{macrocode}
+\RequirePackage[ngerman]{babel}
+%    \end{macrocode}
+%
+% Die Seitengr"o\ss{}e wird mit dem |geometry|-Paket und der
+% |a4paper|-Einstellung gesetzt.
+%    \begin{macrocode}
+\RequirePackage[a4paper]{geometry}
+%    \end{macrocode}
+%
+% Das Paket |fancyhdr| wird f"ur den Header ben"otigt.
+%    \begin{macrocode}
+\RequirePackage{fancyhdr}
+%    \end{macrocode}
+%
+% Das Paket |enumitem| wird f"ur die Formatierung der Teilaufgaben
+% ben"otigt.
+%    \begin{macrocode}
+\RequirePackage{enumitem}
+%    \end{macrocode}
+%
+% Diese Pakete dienen der Darstellung von mathematischen Ausdr"ucken.
+%    \begin{macrocode}
+\RequirePackage{amsmath,amsthm,amssymb}
+\RequirePackage{mathtools}
+%    \end{macrocode}
+%
+% \subsection{Header}
+% Es werden Token-Listen f"ur Name und Matrikelnummer aller Abgabenteilnehmer
+% definiert.
+%    \begin{macrocode}
+\newtoks\AutorA
+\newtoks\AutorANum
+\newtoks\AutorB
+\newtoks\AutorBNum
+\newtoks\AutorC
+\newtoks\AutorCNum
+\newtoks\AutorD
+\newtoks\AutorDNum
+%    \end{macrocode}
+%
+% \begin{macro}{\autora,\autorb,\autorc,\autord}
+% Die Befehle zum Setzen von Namen und Matrikelnummern werden definiert.
+%    \begin{macrocode}
+\newcommand{\autora}[2]{\AutorA={#1}\AutorANum={#2}}
+\newcommand{\autorb}[2]{\AutorB={#1}\AutorBNum={#2}}
+\newcommand{\autorc}[2]{\AutorC={#1}\AutorCNum={#2}}
+\newcommand{\autord}[2]{\AutorD={#1}\AutorDNum={#2}}
+%    \end{macrocode}
+% \end{macro}
+%
+% Der Header wird mit den Namen und Matrikelnummern der Abgabenteilnehmer
+% gesetzt.
+%    \begin{macrocode}
+\setlength{\headheight}{29.425pt}
+\addtolength{\topmargin}{-17.425pt}
+\pagestyle{fancy}
+\fancyhead[r]{\begin{tabular}{llll}
+    \the\AutorA & \the\AutorB & \the\AutorC & \the\AutorD \\
+    \the\AutorANum & \the\AutorBNum & \the\AutorCNum & \the\AutorDNum
+\end{tabular}}
+%    \end{macrocode}
+%
+% \subsection{Mathematische Ausdr"ucke}
+% \begin{macro}{\N,\Z,\Q,\R,\C,\abs}
+% Die mathematischen Ausdr"ucke werden definiert.
+%    \begin{macrocode}
+\newcommand{\N}{\ensuremath\mathbb N}
+\newcommand{\Z}{\ensuremath\mathbb Z}
+\newcommand{\Q}{\ensuremath\mathbb Q}
+\newcommand{\R}{\ensuremath\mathbb R}
+\newcommand{\C}{\ensuremath\mathbb C}
+\newcommand{\abs}[1]{\ensuremath\left\vert#1\right\vert}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Formatierung der Aufgaben}
+% \begin{macro}{Aufgabe}
+% \begin{environment}{Teilaufgabe}
+% Der Befehl f"ur die "Uberschrift und die Umgebung f"ur Teilaufgaben werden
+% definiert.
+%    \begin{macrocode}
+\newcommand{\Aufgabe}[2]{\noindent\textbf{Aufgabe~#1 (#2~Punkte).}}
+\newenvironment{Teilaufgabe}
+    {\begin{enumerate}[label=(\alph*),resume=teilaufgaben]\item}
+    {\end{enumerate}}
+%    \end{macrocode}
+% \end{environment}
+% \end{macro}
+%
+% \Finale
+\endinput
